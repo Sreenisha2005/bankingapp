@@ -30,13 +30,25 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/deposit")
-    public Double deposit(@PathVariable Long id, @RequestParam Double deposit){
-        return accountService.Deposit(id, deposit);
+    public ResponseEntity<?> deposit(@PathVariable Long id, @RequestParam Double deposit){
+        try {
+            Double deposit1 = accountService.Deposit(id, deposit);
+            return ResponseEntity.ok(deposit1);
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/{id}/withdraw")
-    public Double withdraw(@PathVariable Long id, @RequestParam Double amount){
-        return accountService.Withdraw(id, amount);
+    public ResponseEntity<?> withdraw(@PathVariable Long id, @RequestParam Double amount){
+        try {
+            Double withdraw = accountService.Withdraw(id, amount);
+            return ResponseEntity.ok(withdraw);
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}/balance")
