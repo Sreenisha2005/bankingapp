@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -63,8 +65,17 @@ public class AccountController {
     }
 
     @GetMapping("/details")
-    public String accDetails(@RequestParam String name){
-        return accountService.accountDetails(name);
+    public ResponseEntity<?> accDetails(@RequestParam String name) {
+        try {
+            Account account = accountService.getAccountByName(name);
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", account.getId());
+            response.put("name", account.getAccountHolderName());
+            response.put("balance", account.getBalance());
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/{id}/transfer")

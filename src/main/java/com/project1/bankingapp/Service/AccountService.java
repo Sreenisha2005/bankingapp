@@ -27,13 +27,12 @@ public class AccountService {
         return accountRepository.save(acc1);
     }
 
-    public String accountDetails(String name){
-        Account account = accountRepository.findByAccountHolderName(name).orElseThrow(() -> new RuntimeException("Account not found!"));
-        return "Account Id: "+ account.getId()+"\nAccount: " + account.getAccountHolderName() +
-                "\nBalance: " + account.getBalance();
-
+    public Account getAccountByName(String name) {
+        return accountRepository.findByAccountHolderName(name)
+                .orElseThrow(() -> new RuntimeException("Account not found!"));
     }
-//Account Id: "+ account.getId()+
+
+    //Account Id: "+ account.getId()+
     @Transactional
     public Double Deposit(Long id, Double deposit){
         Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account not found!"));

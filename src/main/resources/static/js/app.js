@@ -18,18 +18,19 @@ document.getElementById("createForm").addEventListener("submit", async (e) => {
 });
 
 // ---------------- DEPOSIT ----------------
-document.getElementById("depositForm").addEventListener("submit", async (e) => {
+document.getElementById("depositForm").addEventListener("submit", async(e) => {
     e.preventDefault();
     let id = document.getElementById("depositId").value;
     let amount = document.getElementById("depositAmount").value;
 
-    let res = await fetch(`${baseUrl}/${id}/deposit?amount=${amount}`, { method: "POST" });
-    if (res.ok) {
-        let balance = await res.json(); // returns Double
+    let res = await fetch(`${baseUrl}/${id}/deposit?deposit=${amount}`, { method: "POST" });
+    if(res.ok){
+        let data = await parseResponse(res);
+        let balance = data.balance ?? data;
         document.getElementById("depositResult").innerText = `New Balance: ${balance}`;
     } else {
-        let error = await res.text();
-        document.getElementById("depositResult").innerText = `Failed: ${error}`;
+        let error = await parseResponse(res);
+        document.getElementById("depositResult").innerText = `Failed: ${error.message || error}`;
     }
 });
 
@@ -40,8 +41,9 @@ document.getElementById("withdrawForm").addEventListener("submit", async (e) => 
     let amount = document.getElementById("withdrawAmount").value;
 
     let res = await fetch(`${baseUrl}/${id}/withdraw?amount=${amount}`, { method: "POST" });
+
     if (res.ok) {
-        let balance = await res.json(); // returns Double
+        let balance = await res.json(); // backend returns a number
         document.getElementById("withdrawResult").innerText = `New Balance: ${balance}`;
     } else {
         let error = await res.text();
@@ -49,19 +51,22 @@ document.getElementById("withdrawForm").addEventListener("submit", async (e) => 
     }
 });
 
+
 // ---------------- BALANCE ----------------
 document.getElementById("balanceForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    let id = document.getElementById("balanceId").value;
+  e.preventDefault();
+  let id = document.getElementById("balanceId").value;
 
-    let res = await fetch(`${baseUrl}/${id}/balance`);
-    if (res.ok) {
-        let balance = await res.json(); // returns Double
-        document.getElementById("balanceResult").innerText = `Your balance: ${balance}`;
-    } else {
-        let error = await res.text();
-        document.getElementById("balanceResult").innerText = `Failed: ${error}`;
-    }
+  let res = await fetch(`${baseUrl}/${id}/balance`);
+  if(res.ok){
+    let data = await parseResponse(res);
+    let balance = data.balance ?? data;
+    document.getElementById("balanceResult").innerText = `Your balance: ${balance}`;
+  }
+  else {
+    let error = await parseResponse(res);
+    document.getElementById("balanceResult").innerText = `Failed: ${error.message || error}`;
+  }
 });
 
 // ---------------- ACCOUNT DETAILS (by name) ----------------
@@ -70,12 +75,15 @@ document.getElementById("AccDetailsForm").addEventListener("submit", async (e) =
     let name = document.getElementById("accDetailsName").value;
 
     let res = await fetch(`${baseUrl}/details?name=${name}`);
-    if (res.ok) {
-        let message = await res.text(); // plain String
-        document.getElementById("accDetailsResult").innerText = message;
+    if(res.ok){
+      let data = await res.json();
+      document.getElementById("accDetailsResult").innerHTML =
+          `Account Id: ${data.id}<br>
+           Account: ${data.name}<br>
+           Balance: ${data.balance}`;
     } else {
-        let error = await res.text();
-        document.getElementById("accDetailsResult").innerText = `Failed: ${error}`;
+      let error = await res.text();
+      document.getElementById("accDetailsResult").innerText = `Failed: ${error}`;
     }
 });
 
