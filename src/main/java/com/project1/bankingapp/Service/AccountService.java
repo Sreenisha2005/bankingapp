@@ -27,7 +27,7 @@ public class AccountService {
         return accountRepository.save(acc1);
     }
 
-    public Account getAccountByName(String name) {
+    public Account getAccountDetails(String name) {
         return accountRepository.findByAccountHolderName(name)
                 .orElseThrow(() -> new RuntimeException("Account not found!"));
     }

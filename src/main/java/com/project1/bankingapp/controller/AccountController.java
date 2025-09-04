@@ -65,17 +65,9 @@ public class AccountController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<?> accDetails(@RequestParam String name) {
-        try {
-            Account account = accountService.getAccountByName(name);
-            Map<String, Object> response = new HashMap<>();
-            response.put("id", account.getId());
-            response.put("name", account.getAccountHolderName());
-            response.put("balance", account.getBalance());
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Account> accDetails(@RequestParam String name) {
+        Account account = accountService.getAccountDetails(name);
+        return ResponseEntity.ok(account);
     }
 
     @PostMapping("/{id}/transfer")
