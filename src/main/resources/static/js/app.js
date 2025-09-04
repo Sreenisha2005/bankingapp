@@ -1,5 +1,9 @@
 const baseUrl = "http://localhost:8080/accounts";
 
+console.log("depositForm element:", document.getElementById("depositForm"));
+console.log("withdrawForm element:", document.getElementById("withdrawForm"));
+console.log("balanceForm element:", document.getElementById("balanceForm"));
+
 // ---------------- CREATE ----------------
 document.getElementById("createForm").addEventListener("submit", async (e) => {
     e.preventDefault();
