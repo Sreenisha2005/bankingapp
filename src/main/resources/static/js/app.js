@@ -97,7 +97,7 @@ if (AccDetailsForm) {
             let res = await fetch(`${baseUrl}/details?name=${name}`);
 
             if (res.ok) {
-                let data = await res.json(); // ✅ backend now returns JSON Account object
+                let data = await res.json(); //json
                 document.getElementById("accDetailsResult").innerHTML =
                     `Account Id: ${data.id}<br>
                      Account: ${data.accountHolderName}<br>
